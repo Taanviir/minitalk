@@ -6,11 +6,11 @@
 #    By: tanas <tanas@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/28 21:53:47 by tanas             #+#    #+#              #
-#    Updated: 2023/03/06 17:56:08 by tanas            ###   ########.fr        #
+#    Updated: 2023/03/14 18:56:37 by tanas            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-C_FLAGS = -Wall -Wextra -Werror
+C_FLAGS = -Wall -Wextra -Werror -g3
 LIBFT = libft/libft.a
 
 OBJS_DIR = objects
