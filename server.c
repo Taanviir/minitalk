@@ -6,7 +6,7 @@
 /*   By: tanas <tanas@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 22:51:26 by tanas             #+#    #+#             */
-/*   Updated: 2023/03/14 18:27:34 by tanas            ###   ########.fr       */
+/*   Updated: 2023/03/15 15:09:46 by tanas            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,32 +15,30 @@
 /*
 	SIGUSR1 == 1;
 	SIGUSR2 == 0;
-
-	Need sigaction for acknowledgment that I received the characters
 */
 
 static void	sigusr_handler(int signum, siginfo_t *info, void *context)
 {
-	static char	c = 0;
-	static int	bits = 0;
+	static char	c;
+	static int	bits;
 
 	(void) context;
+	(void) info;
 	c |= (signum == SIGUSR1);
-	// ft_printf("%c\n", c);
-	// if (signum == SIGUSR1)
-	// 	printf("1\n");
-	// else
-	// 	printf("0\n");
 	bits++;
 	if (bits == 8)
 	{
 		ft_printf("%c", c);
-		// ft_printf("%i", c);
 		bits = 0;
 		c = 0;
-		kill(info->si_pid, SIGUSR2);
+		kill(info->si_pid, SIGUSR1);
 	}
 	c <<= 1;
+	if (signum == SIGINT)
+	{
+		ft_printf(B_MAGENTA"\nServer shutting down.\n"RESET);
+		exit(4);
+	}
 }
 
 // server
@@ -59,6 +57,7 @@ int	main(int argc, char **argv)
 	act.sa_sigaction = sigusr_handler;
 	sigaction(SIGUSR1, &act, NULL);
 	sigaction(SIGUSR2, &act, NULL);
+	sigaction(SIGINT, &act, NULL);
 	ft_printf(B_CYAN"SERVER PID: %i\n"RESET, getpid());
 	while (1)
 		pause();
