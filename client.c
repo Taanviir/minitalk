@@ -6,13 +6,36 @@
 /*   By: tanas <tanas@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 14:43:39 by tanas             #+#    #+#             */
-/*   Updated: 2023/03/15 16:18:55 by tanas            ###   ########.fr       */
+/*   Updated: 2023/03/15 20:10:53 by tanas            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minitalk.h"
 
 int	g_strlen;
+
+static pid_t	check_pid(char *pid_c)
+{
+	int		i;
+	pid_t	pid;
+
+	i = -1;
+	while (pid_c[++i])
+	{
+		if (! ((pid_c[i] >= '0') && (pid_c[i] <= '9')))
+		{
+			ft_printf(BI_RED"\nError! Invalid PID entered.\n\n"RESET);
+			exit(1);
+		}
+	}
+	pid = ft_atoi(pid_c);
+	if (pid <= 0 || pid >= 100000)
+	{
+		ft_printf(BI_RED"\nError! Invalid PID entered.\n\n"RESET);
+		exit(2);
+	}
+	return (pid);
+}
 
 static void	sigusr1_handler(int signum, siginfo_t *info, void *context)
 {
@@ -62,12 +85,12 @@ int	main(int argc, char **argv)
 		ft_printf(BI_RED"\nError! Invalid number of arguments entered.\n\n"RESET);
 		exit(0);
 	}
-	if (!argv[2])
+	if (!argv[2][0])
 	{
-		ft_printf(BI_RED"Error! Empty string entered.\n"RESET);
+		ft_printf(BI_RED"\nError! Empty string entered.\n\n"RESET);
 		exit(0);
 	}
-	pid = ft_atoi(argv[1]);
+	pid = check_pid(argv[1]);
 	g_strlen = ft_strlen(argv[2]);
 	sigemptyset(&act.sa_mask);
 	act.sa_flags = SA_SIGINFO;
