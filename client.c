@@ -6,7 +6,7 @@
 /*   By: tanas <tanas@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 14:43:39 by tanas             #+#    #+#             */
-/*   Updated: 2023/03/15 20:10:53 by tanas            ###   ########.fr       */
+/*   Updated: 2023/06/15 16:06:01 by tanas            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,12 +37,10 @@ static pid_t	check_pid(char *pid_c)
 	return (pid);
 }
 
-static void	sigusr1_handler(int signum, siginfo_t *info, void *context)
+static void	sigusr1_handler(int signum)
 {
 	static int	char_count;
 
-	(void) context;
-	(void) info;
 	if (signum == SIGUSR1)
 		char_count++;
 	if (char_count == g_strlen)
@@ -92,9 +90,7 @@ int	main(int argc, char **argv)
 	}
 	pid = check_pid(argv[1]);
 	g_strlen = ft_strlen(argv[2]);
-	sigemptyset(&act.sa_mask);
-	act.sa_flags = SA_SIGINFO;
-	act.sa_sigaction = sigusr1_handler;
+	act.sa_handler = sigusr1_handler;
 	sigaction(SIGUSR1, &act, NULL);
 	send_signal(pid, argv[2]);
 }

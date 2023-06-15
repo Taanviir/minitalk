@@ -6,7 +6,7 @@
 /*   By: tanas <tanas@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/28 22:51:26 by tanas             #+#    #+#             */
-/*   Updated: 2023/03/15 15:09:46 by tanas            ###   ########.fr       */
+/*   Updated: 2023/06/15 15:58:09 by tanas            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ int	main(int argc, char **argv)
 		ft_printf(BI_RED"\nError! Invalid number of arguments entered.\n\n"RESET);
 		exit(0);
 	}
-	sigemptyset(&act.sa_mask);
 	act.sa_flags = SA_SIGINFO;
 	act.sa_sigaction = sigusr_handler;
 	sigaction(SIGUSR1, &act, NULL);
